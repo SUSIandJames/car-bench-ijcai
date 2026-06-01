@@ -1,0 +1,29 @@
+# Public test-set scenario for leaderboard comparison — BEST KNOWN CONFIG.
+# 60 tasks (20 base / 20 hallucination / 20 disambiguation) × 3 trials → Pass^3.
+#
+# This is the configuration that produced our best result (Avg Pass^3 0.80 on
+# 2026-05-28, the leaderboard leader): gemini-3.5-flash + the 7-rule system
+# prompt + medium thinking, at temperature 0 (deterministic), single pass.
+#
+# Self-consistency voting and the verify pass were tried on top of this and
+# REGRESSED it to 0.60 (see MODIFICATIONS.md 2026-05-29 15:30) — they are
+# off here on purpose. The agent defaults to n=1 / verify off, so this cmd
+# carries no harness flags.
+#
+# Target baseline (leaderboard, full test set): Gemini 2.5 Flash Avg Pass^3 .41.
+
+[evaluator]
+endpoint = "http://127.0.0.1:8081"
+cmd = "python src/evaluator/server.py --host 127.0.0.1 --port 8081"
+
+[agent_under_test]
+endpoint = "http://127.0.0.1:8080"
+cmd = "python src/track_1_agent_under_test/server.py --host 127.0.0.1 --port 8080 --agent-llm gemini/gemini-3.5-flash --temperature 0.0 --thinking --reasoning-effort medium"
+
+[config]
+num_trials = 3
+task_split = "test"
+tasks_base_num_tasks = 20
+tasks_hallucination_num_tasks = 20
+tasks_disambiguation_num_tasks = 20
+max_steps = 50

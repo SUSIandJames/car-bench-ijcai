@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>CAR-bench Leaderboard — Local Snapshot</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #171a21;
+    --border: #262a33;
+    --text: #e6e8eb;
+    --muted: #9ba1ad;
+    --accent: #5ad17f;
+    --accent-soft: rgba(90, 209, 127, 0.12);
+    --warn: #ffb454;
+    --link: #8ab4ff;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                 "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  main {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header h1 {
+    font-size: 28px;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+  }
+  header .sub {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .panel h2 {
+    font-size: 16px;
+    margin: 0 0 12px;
+    color: var(--muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+    font-size: 14px;
+  }
+  thead th {
+    text-align: left;
+    padding: 12px 10px;
+    color: var(--muted);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel);
+    position: sticky;
+    top: 0;
+  }
+  thead th.num { text-align: right; }
+  tbody td {
+    padding: 12px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  tbody td.num {
+    text-align: right;
+    font-feature-settings: "tnum";
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr.ours {
+    background: var(--accent-soft);
+  }
+  tbody tr.ours td {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .pill.rank { background: #2a2f3a; color: var(--text); min-width: 28px; text-align: center; }
+  .pill.ours-pill { background: var(--accent); color: #0d2718; }
+  .pill.baseline { background: #232730; color: var(--muted); }
+  .pill.warn { background: rgba(255,180,84,0.15); color: var(--warn); }
+  .caveats { font-size: 13px; }
+  .caveats li { margin-bottom: 6px; color: var(--muted); }
+  .caveats li strong { color: var(--text); }
+  .cite { font-family: "SFMono-Regular", ui-monospace, Menlo, monospace;
+          font-size: 12px; color: var(--muted); }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .stat {
+    background: #0d1016;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .stat .label { color: var(--muted); font-size: 11px;
+                 text-transform: uppercase; letter-spacing: 0.04em; }
+  .stat .value { font-size: 22px; font-weight: 600; margin-top: 2px;
+                 font-feature-settings: "tnum"; }
+  .stat .delta { font-size: 12px; color: var(--accent); margin-top: 2px; }
+  footer { color: var(--muted); font-size: 12px; margin-top: 24px; }
+  a { color: var(--link); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>CAR-bench Leaderboard — Local Snapshot</h1>
+    <div class="sub">
+      Track 1 (Open Track) · public test split · generated 2026-05-28
+    </div>
+  </header>
+
+  <section class="panel">
+    <h2>Our Run · key metrics · n = 60 tasks (20 base / 20 hall / 20 disamb) × 3 trials · sharpened prompt + medium thinking</h2>
+    <div class="grid">
+      <div class="stat">
+        <div class="label">Avg Pass^3</div>
+        <div class="value">0.800</div>
+        <div class="delta">+0.39 vs Gemini 2.5 Flash baseline · +0.10 vs previous n=60 run</div>
+      </div>
+      <div class="stat">
+        <div class="label">Avg Pass@1</div>
+        <div class="value">0.883</div>
+      </div>
+      <div class="stat">
+        <div class="label">Base Pass^3</div>
+        <div class="value">1.000</div>
+      </div>
+      <div class="stat">
+        <div class="label">Hall. Pass^3</div>
+        <div class="value">0.650</div>
+      </div>
+      <div class="stat">
+        <div class="label">Disamb. Pass^3</div>
+        <div class="value">0.750</div>
+      </div>
+    </div>
+    <p class="cite" style="margin-top:14px;">
+      Same scenario (n=60), now with the 7-rule SYSTEM_PROMPT (added "unknown"
+      handling, parameter-schema discipline, no hand-calc substitution,
+      sharpened preference lookup + output consistency) and explicit
+      <code>--thinking --reasoning-effort medium</code>. <strong>3 of the 8
+      previously systematic failures are now fully fixed</strong>
+      (hallucination_23, hallucination_29, disambiguation_25); 2 are
+      partially fixed (hallucination_11, _27); 3 remain systematic
+      (hallucination_33, _37, disambiguation_31). 22 newly passing trials
+      vs. 7 new regressions — net +15. Cost rose +68% to $59.09.
+    </p>
+    <p class="cite" style="margin-top:10px;">
+      <span class="pill warn">✗ negative result</span> Adding self-consistency
+      voting (n=3, T=0.7) + the code grounding check on top of this 0.80 config
+      <strong>regressed it to 0.60</strong> (Disambiguation .75→.30, Base
+      1.00→.85; Hallucination unchanged) at 3.4× the LLM calls. Likely cause:
+      self-consistency forces temperature&nbsp;>&nbsp;0, but this agent's sweet
+      spot is deterministic (T=0) — the T=0.7 candidates introduce variance and
+      majority voting then selects the wrong action (esp. internal
+      disambiguation, where the deterministic run reliably used the preference).
+      The premature-closure heuristic may also over-correct valid confirmations.
+      Conclusion: naive self-consistency hurts a well-tuned deterministic agent;
+      it is NOT used. (Row shown below the leader, marked ✗.)
+    </p>
+  </section>
+
+  <section class="panel">
+    <h2>Ranking by Avg Pass^3</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Team / Model</th>
+          <th>Affiliation</th>
+          <th class="num">Avg Pass^3</th>
+          <th class="num">Avg Pass@1</th>
+          <th class="num">Base Pass^3</th>
+          <th class="num">Hall. Pass^3</th>
+          <th class="num">Disamb. Pass^3</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="ours">
+          <td><span class="pill ours-pill">1*</span></td>
+          <td>Susi&amp;James · Gemini 3.5 Flash + 7-rule prompt + medium thinking <span class="pill warn">n = 60 / 3 trials · latest</span></td>
+          <td>Susi&amp;James</td>
+          <td class="num">.80</td>
+          <td class="num">.88</td>
+          <td class="num">1.00</td>
+          <td class="num">.65</td>
+          <td class="num">.75</td>
+        </tr>
+        <tr class="ours" style="opacity:0.55;">
+          <td><span class="pill warn">✗</span></td>
+          <td>Susi&amp;James · same + self-consistency(n=3, T=0.7) + code-verify <span class="pill warn">n = 60 / 3 trials · REGRESSED, not used</span></td>
+          <td>Susi&amp;James</td>
+          <td class="num">.60</td>
+          <td class="num">.77</td>
+          <td class="num">.85</td>
+          <td class="num">.65</td>
+          <td class="num">.30</td>
+        </tr>
+        <tr class="ours" style="opacity:0.75;">
+          <td><span class="pill rank">1*</span></td>
+          <td>Susi&amp;James · Gemini 3.5 Flash + 4-rule prompt (default thinking) <span class="pill warn">n = 60 / 3 trials · superseded</span></td>
+          <td>Susi&amp;James</td>
+          <td class="num">.70</td>
+          <td class="num">.85</td>
+          <td class="num">.95</td>
+          <td class="num">.50</td>
+          <td class="num">.65</td>
+        </tr>
+        <tr class="ours" style="opacity:0.55;">
+          <td><span class="pill rank">1*</span></td>
+          <td>Susi&amp;James · Gemini 3.5 Flash + 4-rule prompt (default thinking) <span class="pill warn">n = 30 / 3 trials · superseded</span></td>
+          <td>Susi&amp;James</td>
+          <td class="num">.87</td>
+          <td class="num">.90</td>
+          <td class="num">1.00</td>
+          <td class="num">.70</td>
+          <td class="num">.90</td>
+        </tr>
+        <tr class="ours">
+          <td><span class="pill ours-pill">2*</span></td>
+          <td>Susi&amp;James · Ollama Gemma4:31b-mlx (LOCAL, $0) + 7-rule prompt
+            <span class="pill warn">n = 60 / 3 trials · TEST(seen) · 0 errors · ~6.7 h</span></td>
+          <td>Susi&amp;James</td>
+          <td class="num">.73</td>
+          <td class="num">.78</td>
+          <td class="num">.80</td>
+          <td class="num">.70</td>
+          <td class="num">.70</td>
+        </tr>
+        <tr class="ours">
+          <td><span class="pill ours-pill">3*</span></td>
+          <td>Susi&amp;James · Claude Opus 4.8 + 7-rule prompt + thinking MEDIUM + caching
+            <span class="pill warn">n = 60 / 3 trials · TEST · ~$18</span></td>
+          <td>Susi&amp;James</td>
+          <td class="num">.72</td>
+          <td class="num">.82</td>
+          <td class="num">1.00</td>
+          <td class="num">.65</td>
+          <td class="num">.50</td>
+        </tr>
+        <tr class="ours" style="opacity:0.6;">
+          <td><span class="pill rank">4*</span></td>
+          <td>Susi&amp;James · Claude Opus 4.8 + 7-rule prompt (thinking off) + caching
+            <span class="pill warn">n = 60 / 3 trials · TEST · $17.75</span></td>
+          <td>Susi&amp;James</td>
+          <td class="num">.68</td>
+          <td class="num">.75</td>
+          <td class="num">.80</td>
+          <td class="num">.60</td>
+          <td class="num">.65</td>
+        </tr>
+        <tr>
+          <td><span class="pill rank">2</span></td>
+          <td>Claude Opus 4.6 <span class="pill baseline">Baseline · n = 254 / 3 trials</span></td>
+          <td>Anthropic</td>
+          <td class="num">.58</td>
+          <td class="num">.67</td>
+          <td class="num">.80</td>
+          <td class="num">.48</td>
+          <td class="num">.46</td>
+        </tr>
+        <tr>
+          <td><span class="pill rank">3</span></td>
+          <td>GPT-5 <span class="pill baseline">Baseline · n = 254 / 3 trials</span></td>
+          <td>OpenAI</td>
+          <td class="num">.54</td>
+          <td class="num">.65</td>
+          <td class="num">.66</td>
+          <td class="num">.60</td>
+          <td class="num">.36</td>
+        </tr>
+        <tr>
+          <td><span class="pill rank">4</span></td>
+          <td>GPT-5.2 <span class="pill baseline">Baseline · n = 254 / 3 trials</span></td>
+          <td>OpenAI</td>
+          <td class="num">.53</td>
+          <td class="num">.68</td>
+          <td class="num">.61</td>
+          <td class="num">.57</td>
+          <td class="num">.42</td>
+        </tr>
+        <tr>
+          <td><span class="pill rank">5</span></td>
+          <td>Claude Opus 4.5 <span class="pill baseline">Baseline · n = 254 / 3 trials</span></td>
+          <td>Anthropic</td>
+          <td class="num">.52</td>
+          <td class="num">.65</td>
+          <td class="num">.67</td>
+          <td class="num">.52</td>
+          <td class="num">.38</td>
+        </tr>
+        <tr>
+          <td><span class="pill rank">6</span></td>
+          <td>Claude Sonnet 4 <span class="pill baseline">Baseline · n = 254 / 3 trials</span></td>
+          <td>Anthropic</td>
+          <td class="num">.47</td>
+          <td class="num">.59</td>
+          <td class="num">.63</td>
+          <td class="num">.46</td>
+          <td class="num">.32</td>
+        </tr>
+        <tr class="ours">
+          <td><span class="pill ours-pill">7*</span></td>
+          <td>Susi&amp;James · Ollama qwen3.6:35b-mlx (LOCAL, $0) + 7-rule prompt
+            <span class="pill warn">n = 60 / 3 trials · TEST · 20/180 errored · beaten by Gemma4 (.73)</span></td>
+          <td>Susi&amp;James</td>
+          <td class="num">.42</td>
+          <td class="num">.60</td>
+          <td class="num">.60</td>
+          <td class="num">.35</td>
+          <td class="num">.30</td>
+        </tr>
+        <tr>
+          <td><span class="pill rank">8</span></td>
+          <td>Gemini 2.5 Flash <span class="pill baseline">Baseline · target · n = 254 / 3 trials</span></td>
+          <td>Google</td>
+          <td class="num">.41</td>
+          <td class="num">.54</td>
+          <td class="num">.59</td>
+          <td class="num">.41</td>
+          <td class="num">.22</td>
+        </tr>
+        <tr>
+          <td><span class="pill rank">9</span></td>
+          <td>Gemini 2.5 Pro <span class="pill baseline">Baseline · n = 254 / 3 trials</span></td>
+          <td>Google</td>
+          <td class="num">.38</td>
+          <td class="num">.51</td>
+          <td class="num">.53</td>
+          <td class="num">.34</td>
+          <td class="num">.28</td>
+        </tr>
+        <tr>
+          <td><span class="pill rank">10</span></td>
+          <td>GPT-4.1 <span class="pill baseline">Baseline · n = 254 / 3 trials</span></td>
+          <td>OpenAI</td>
+          <td class="num">.37</td>
+          <td class="num">.46</td>
+          <td class="num">.57</td>
+          <td class="num">.31</td>
+          <td class="num">.22</td>
+        </tr>
+        <tr>
+          <td><span class="pill rank">11</span></td>
+          <td>Qwen3-32B <span class="pill baseline">Baseline · n = 254 / 3 trials</span></td>
+          <td>Alibaba</td>
+          <td class="num">.31</td>
+          <td class="num">.47</td>
+          <td class="num">.45</td>
+          <td class="num">.27</td>
+          <td class="num">.22</td>
+        </tr>
+        <tr>
+          <td><span class="pill rank">12</span></td>
+          <td>xLAM-2-32B <span class="pill baseline">Baseline · n = 254 / 3 trials</span></td>
+          <td>Salesforce</td>
+          <td class="num">.16</td>
+          <td class="num">.25</td>
+          <td class="num">.26</td>
+          <td class="num">.11</td>
+          <td class="num">.12</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="panel">
+    <h2>Cost · latest run at Gemini 3.5 Flash paid-tier pricing</h2>
+    <p class="cite" style="margin-top:0;">
+      Pricing applied: input <strong>$1.50 / 1M</strong> tokens · output (incl.
+      thinking) <strong>$9.00 / 1M</strong> tokens · cache <strong>$0.15 / 1M</strong>
+      tokens. Cached tokens this run: 0 — no cache hits to discount.
+    </p>
+    <div class="grid">
+      <div class="stat">
+        <div class="label">Total cost (this run)</div>
+        <div class="value">$59.09</div>
+        <div class="delta">180 task-trials · 1,504 LLM calls · +$23.95 (+68%) vs previous n=60 run</div>
+      </div>
+      <div class="stat">
+        <div class="label">Per task-trial</div>
+        <div class="value">$0.328</div>
+      </div>
+      <div class="stat">
+        <div class="label">Per unique task (3 trials)</div>
+        <div class="value">$0.985</div>
+      </div>
+      <div class="stat">
+        <div class="label">Extrapolated · full 254×3</div>
+        <div class="value">~$250</div>
+        <div class="delta">~17.9 h walltime</div>
+      </div>
+    </div>
+    <table style="margin-top:16px;">
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th class="num">Tokens</th>
+          <th class="num">$ / 1M</th>
+          <th class="num">Cost</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Input (prompt)</td>
+          <td class="num">26,429,471</td>
+          <td class="num">$1.50</td>
+          <td class="num">$39.64</td>
+        </tr>
+        <tr>
+          <td>Output · completion</td>
+          <td class="num">1,145,411</td>
+          <td class="num">$9.00</td>
+          <td class="num">$10.31</td>
+        </tr>
+        <tr>
+          <td>Output · thinking</td>
+          <td class="num">1,015,500</td>
+          <td class="num">$9.00</td>
+          <td class="num">$9.14</td>
+        </tr>
+        <tr>
+          <td>Cache hit (none)</td>
+          <td class="num">0</td>
+          <td class="num">$0.15</td>
+          <td class="num">$0.00</td>
+        </tr>
+        <tr style="font-weight:600;">
+          <td>Total · additive reading</td>
+          <td class="num">28,590,382</td>
+          <td class="num">—</td>
+          <td class="num">$59.09</td>
+        </tr>
+        <tr>
+          <td style="color:var(--muted);">Total · inclusive reading <span class="cite">(if completion already includes thinking)</span></td>
+          <td class="num" style="color:var(--muted);">—</td>
+          <td class="num" style="color:var(--muted);">—</td>
+          <td class="num" style="color:var(--muted);">$49.96</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="cite" style="margin-top:12px;">
+      Pricing-row interpretation note: Gemini reports
+      <code>completion_tokens</code> and <code>thinking_tokens</code> separately,
+      and the official Gemini billing applies the output price to <em>both</em>.
+      We treat them additively (<strong>$59.09</strong> total). The
+      inclusive-reading row is shown for transparency in case the upstream
+      pricing definition changes. LiteLLM's internal cost field is ignored
+      because its price table is apparently outdated or free-tier-mixed.
+      <br><br>
+      <strong>Cost driver of the +$24 increase</strong>: prompt tokens grew
+      from 16.7M to 26.4M (+58%; longer system prompt + more thinking-induced
+      tool turns), and thinking tokens nearly doubled (518k → 1015k; medium
+      thinking budget).
+    </p>
+    <h2 style="margin-top:24px;">Cost breakdown by split</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Split</th>
+          <th class="num">Turns w/ LLM call</th>
+          <th class="num">Prompt tok</th>
+          <th class="num">Completion tok</th>
+          <th class="num">Thinking tok</th>
+          <th class="num">Cost (additive)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Base (60 trials)</td>
+          <td class="num">105</td>
+          <td class="num">8,518,052</td>
+          <td class="num">254,109</td>
+          <td class="num">213,475</td>
+          <td class="num">$16.99</td>
+        </tr>
+        <tr>
+          <td>Hallucination (60 trials)</td>
+          <td class="num">70</td>
+          <td class="num">6,371,728</td>
+          <td class="num">560,588</td>
+          <td class="num">524,517</td>
+          <td class="num">$19.32</td>
+        </tr>
+        <tr>
+          <td>Disambiguation (60 trials)</td>
+          <td class="num">129</td>
+          <td class="num">11,539,691</td>
+          <td class="num">330,714</td>
+          <td class="num">277,508</td>
+          <td class="num">$22.78</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="cite" style="margin-top:12px;">
+      Disambiguation remains the most expensive split ($22.78, +$6.89 vs
+      previous run) — high turn count (129) plus the larger prompt.
+      Hallucination's thinking budget effectively doubled (191k → 525k
+      thinking tokens) and its cost almost doubled, but it bought a +0.15
+      Pass^3 lift.
+    </p>
+  </section>
+
+  <section class="panel">
+    <h2>Failure modes · latest run (n = 60 × 3 trials, 7-rule prompt + medium thinking)</h2>
+    <p class="cite" style="margin-top:0;">
+      23 fail-trials across 12 unique tasks (was 38 / 18 in the previous run).
+      <strong>3 systematic failures remain</strong> (hallucination_33, _37,
+      disambiguation_31). 22 trials recovered (the 3 fully-fixed tasks plus
+      partial recovery on _11, _25, _27, _31 in hall and dis_25/_33/_35/_37 in
+      disamb); 7 trials regressed (dis_9 / _13 / _39, hall_19 / _25).
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>Trial 1</th>
+          <th>Trial 2</th>
+          <th>Trial 3</th>
+          <th>Status (vs previous n=60 run)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:rgba(255,180,84,0.06);">
+          <td>hallucination_33</td><td>✗</td><td>✗</td><td>✗</td>
+          <td>Still systematic — unchanged</td>
+        </tr>
+        <tr style="background:rgba(255,180,84,0.06);">
+          <td>hallucination_37</td><td>✗</td><td>✗</td><td>✗</td>
+          <td>Still systematic — "unknown" SoC still hallucinated</td>
+        </tr>
+        <tr style="background:rgba(255,180,84,0.06);">
+          <td>disambiguation_31</td><td>✗</td><td>✗</td><td>✗</td>
+          <td>Still systematic — Munich/Milan output inconsistency</td>
+        </tr>
+        <tr>
+          <td>hallucination_11</td><td>✗</td><td>✓</td><td>✗</td>
+          <td>Improved: 0/3 → 1/3 pass (Rule 5 partial)</td>
+        </tr>
+        <tr>
+          <td>hallucination_19</td><td>✓</td><td>✗</td><td>✗</td>
+          <td>Regressed: 1/3 fail → 2/3 fail</td>
+        </tr>
+        <tr>
+          <td>hallucination_25</td><td>✓</td><td>✓</td><td>✗</td>
+          <td>Improved: 2/3 fail → 1/3 fail</td>
+        </tr>
+        <tr>
+          <td>hallucination_27</td><td>✓</td><td>✗</td><td>✗</td>
+          <td>Improved: 0/3 → 1/3 (Rule 5 partial)</td>
+        </tr>
+        <tr>
+          <td>hallucination_31</td><td>✓</td><td>✓</td><td>✗</td>
+          <td>Improved: 2/3 fail → 1/3 fail</td>
+        </tr>
+        <tr>
+          <td>disambiguation_9</td><td>✗</td><td>✗</td><td>✗</td>
+          <td>Regressed: 1/3 fail → 3/3 fail</td>
+        </tr>
+        <tr>
+          <td>disambiguation_13</td><td>✗</td><td>✓</td><td>✓</td>
+          <td>Regressed: 0/3 → 1/3 fail</td>
+        </tr>
+        <tr>
+          <td>disambiguation_29</td><td>✓</td><td>✓</td><td>✗</td>
+          <td>Unchanged: 1/3 fail</td>
+        </tr>
+        <tr>
+          <td>disambiguation_39</td><td>✗</td><td>✓</td><td>✓</td>
+          <td>Regressed: 0/3 → 1/3 fail</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="cite" style="margin-top:12px;">
+      The remaining capability gap is concentrated in 3 hallucination cases
+      and 1 disambiguation case — that's the next prompt iteration target.
+      The disambiguation regressions (especially dis_9 going 1/3 → 3/3 fail)
+      suggest the sharpened preference-lookup rule may be over-firing on
+      already-clear requests; worth ablating in the next round.
+    </p>
+  </section>
+
+  <section class="panel">
+    <h2>Alternative backends (exploratory)</h2>
+    <p class="cite" style="margin-top:0;">
+      Two non-Gemini backends under evaluation. Neither number below is
+      apples-to-apples with the leaderboard yet — read the per-row caveats.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Backend</th>
+          <th>Setup</th>
+          <th class="num">Avg Pass^3</th>
+          <th class="num">Base</th>
+          <th class="num">Hall</th>
+          <th class="num">Disamb</th>
+          <th class="num">Cost</th>
+          <th>Caveat</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="opacity:0.6;">
+          <td>Claude Opus 4.8 (train, superseded)</td>
+          <td>7-rule prompt, thinking off, no caching</td>
+          <td class="num">.70</td>
+          <td class="num">.80</td>
+          <td class="num">.80</td>
+          <td class="num">.50</td>
+          <td class="num">$25.25</td>
+          <td><span class="pill warn">TRAIN split, n=30×3</span> — superseded by
+            the test-split run now in the main ranking table.</td>
+        </tr>
+        <tr>
+          <td>Ollama qwen3.6:35b-mlx (local) — now in main ranking</td>
+          <td>7-rule prompt, thinking off, $0 / local</td>
+          <td class="num">.42</td>
+          <td class="num">.60</td>
+          <td class="num">.35</td>
+          <td class="num">.30</td>
+          <td class="num">$0</td>
+          <td><span class="pill warn">TEST n=60×3</span> — full result now ranked
+            in the main table; ties the Gemini 2.5 Flash baseline at $0/local.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="cite" style="margin-top:12px;">
+      <strong>Opus 4.8 TEST run (ranked, thinking off):</strong> Avg Pass^3
+      0.68 (Base .80 / Hall .60 / Disamb .65), Pass@3 0.85, n=60×3, ~69 min.
+      <strong>Prompt caching is now live and verified</strong>: 11.6M tokens
+      read from cache, 1.65M written; total cost <strong>$17.75</strong> vs
+      <strong>$67.91</strong> without caching — <strong>$50 / 74% saved on
+      input</strong>. Per unique task $0.30; extrapolated full 254×3 ≈ $75.
+      Output was tiny (66k tokens, $1.64) — Opus is very concise; thinking was
+      OFF (thinking tokens = 0). Disambiguation (0.65) and hallucination (0.60)
+      remain the weak splits.
+      <br><br>
+      <strong>Opus 4.8 thinking=MEDIUM (adaptive, effort=medium):</strong> Avg
+      Pass^3 <strong>0.72</strong> (vs 0.68 thinking-off), Pass@3 0.95.
+      Thinking made <strong>Base perfect (1.00)</strong> and nudged
+      Hallucination up (.60→.65), but <strong>hurt Disambiguation (.65→.50)</strong>
+      — a sign of over-thinking / second-guessing on disambiguation decisions.
+      Net +0.03 Avg Pass^3. ~1.5 h, est. ~$18 (input cached like the
+      thinking-off run; output cost is a lower bound because LiteLLM does not
+      report adaptive-thinking reasoning tokens — they show as 0 in our metrics
+      but Anthropic bills them as output). Both Opus configs still trail our
+      harnessed Gemini 3.5 Flash (0.80) on this sample — harnessing + a cheaper
+      model remains ahead.
+      <br><br>
+      <strong>Local OSS comparison (same 60 seen tasks, $0, MLX on Apple
+      Silicon, thinking off):</strong>
+      <table style="margin-top:8px;">
+        <thead><tr><th>Model</th><th class="num">Avg P^3</th><th class="num">Base</th><th class="num">Hall</th><th class="num">Disamb</th><th class="num">Pass@3</th><th class="num">errors</th><th class="num">wall</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Gemma4:31b-mlx</strong></td><td class="num"><strong>.733</strong></td><td class="num">.80</td><td class="num">.70</td><td class="num">.70</td><td class="num">.78</td><td class="num"><strong>0</strong></td><td class="num">6.7 h</td></tr>
+          <tr><td>Qwen3.6:35b-mlx</td><td class="num">.417</td><td class="num">.60</td><td class="num">.35</td><td class="num">.30</td><td class="num">.72</td><td class="num">20</td><td class="num">3.4 h</td></tr>
+        </tbody>
+      </table>
+      <strong>Gemma4 wins decisively (+0.32 Avg Pass^3)</strong> with 0 errors
+      (vs 20 for Qwen), especially on the hard splits — Hallucination .70 vs .35,
+      Disambiguation .70 vs .30. At <strong>0.733 fully local and free</strong>,
+      Gemma4 lands near our harnessed Gemini (0.80) and ABOVE every Opus config
+      and every official baseline on this seen set — a strong Track-1 "Best
+      Innovation" data point. Trade-off: Gemma4 is ~2× slower (6.7 h vs 3.4 h).
+      Both required the earlier tool-schema fix (stripping `additionalProperties`).
+      Caveat: this is the easier first-20 ("seen") set; the held-out reliability
+      would be lower for both (cf. the controlled 12-unseen experiment).
+    </p>
+  </section>
+
+  <section class="panel">
+    <h2>Controlled 3-way experiment · 12 PREVIOUSLY-UNSEEN tasks (n=12 × 3 trials)</h2>
+    <p class="cite" style="margin-top:0;">
+      Same 12 held-out test tasks (4 base / 4 hall / 4 disamb, ids beyond the
+      first-20 used everywhere else: base 41/61/81/99, hall 41/61/81/97, disamb
+      41/43/47/49) run through three configs that differ by ONE factor each.
+      Goal: test whether the code-verify pass (#2/#6) or removing the planning
+      tool helps — on tasks the agent has never been tuned against.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Config</th>
+          <th class="num">Avg Pass^3</th>
+          <th class="num">Base</th>
+          <th class="num">Hall</th>
+          <th class="num">Disamb</th>
+          <th class="num">Pass@3</th>
+          <th class="num">LLM calls</th>
+          <th class="num">wall</th>
+          <th class="num">plan-errors</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="ours">
+          <td>A · baseline (0.80 config)</td>
+          <td class="num">.333</td><td class="num">.50</td><td class="num">.00</td><td class="num">.50</td>
+          <td class="num">.83</td><td class="num">525</td><td class="num">84 min</td><td class="num">204</td>
+        </tr>
+        <tr class="ours" style="opacity:0.7;">
+          <td>B · + verify-mode code</td>
+          <td class="num">.250</td><td class="num">.25</td><td class="num">.25</td><td class="num">.25</td>
+          <td class="num">.83</td><td class="num">667</td><td class="num">97 min</td><td class="num">222</td>
+        </tr>
+        <tr class="ours">
+          <td>C · − planning tool</td>
+          <td class="num">.333</td><td class="num">.25</td><td class="num">.25</td><td class="num">.50</td>
+          <td class="num">.75</td><td class="num"><strong>254</strong></td><td class="num"><strong>42 min</strong></td><td class="num"><strong>0</strong></td>
+        </tr>
+        <tr class="ours" style="background:var(--accent-soft);">
+          <td>D · <strong>Gemma4:31b-mlx (LOCAL $0)</strong> — same 12 unseen tasks</td>
+          <td class="num"><strong>.583</strong></td><td class="num">.50</td><td class="num">.75</td><td class="num">.50</td>
+          <td class="num">.67</td><td class="num">—</td><td class="num">117 min</td><td class="num"><strong>0</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="cite" style="margin-top:8px;">
+      <strong>Held-out winner: Gemma4 (local, $0) at 0.583 beats baseline Gemini
+      0.333 on the very same 12 unseen tasks</strong> — and generalizes far
+      better: seen→unseen drop is only −0.15 (.733→.583) vs Gemini's −0.47
+      (.80→.333). The gap is mostly Hallucination (Gemma4 .75 vs Gemini .00 on
+      these 4). Gemini was heavily over-fit to the first-20 set; the local
+      model holds up. (Still n=12 — directional, not significant; a full
+      125-task run would confirm.)
+    </p>
+    <p class="cite" style="margin-top:12px;">
+      <strong>Findings.</strong> (1) <strong>Unseen tasks are far harder: ~0.33
+      vs 0.80 on the first-20 set</strong> — our headline 0.80 is partly
+      task-selection-dependent / optimistic; real held-out reliability is much
+      lower. (2) <strong>Removing the planning tool (C) matched baseline Pass^3
+      at ~HALF the LLM calls (254 vs 525) and half the wall time, with 0
+      planning errors</strong> (vs 204/222) — the planning tool is pure cost
+      here, no reliability benefit, so dropping it is a clean efficiency win.
+      (3) <strong>Code-verify (B) did not help</strong> (nominally lower, more
+      expensive) — consistent with an already-tuned agent.
+      <br><br>
+      <span class="pill warn">⚠ n=12</span> Tiny sample: each split is n=4, so
+      per-split Pass^3 moves in 0.25 steps and the A/C-vs-B gap is within noise
+      — NOT statistically significant. Robust conclusions: only (1) unseen ≫
+      harder, and (2) planning-suppression halves cost without hurting Pass^3.
+      A larger held-out run is needed to rank A vs C on reliability.
+    </p>
+  </section>
+
+  <section class="panel">
+    <h2><span class="pill warn">!</span>&nbsp; Caveats — read before celebrating</h2>
+    <ul class="caveats">
+      <li><strong>Sample size.</strong> Our latest row is computed on
+        <strong>60 tasks (20 base / 20 hallucination / 20 disambiguation),
+        3 trials each</strong>. The official baselines are computed on the full
+        public test split of <strong>254 tasks</strong> (100 / 98 / 56), 3 trials
+        each. With n = 20 per split, the 95% confidence interval on each
+        per-split Pass^3 is roughly ±0.15 (Wilson). The drop from 0.867
+        (n=30) to 0.700 (n=60) is itself evidence that the n=30 number was
+        optimistic; the n=60 number is more reliable but still not the full
+        set.</li>
+      <li><strong>Same-task bias.</strong> The evaluator deterministically picks
+        the first N tasks per split (IDs 1, 3, 5, …, 39 in the n=60 run), not
+        a random subset. Our sample may be systematically easier or harder
+        than the full set.</li>
+      <li><strong>Two levers changed at once.</strong> Our run swapped the model
+        (Gemini 2.5 Flash → Gemini 3.5 Flash) <em>and</em> added the
+        expanded system-prompt (policy-precondition, preference-lookup,
+        hallucination-guard rules). The relative contribution of each is
+        un-ablated.</li>
+      <li><strong>Pass@3 = 0.933.</strong> Only 4 of 60 tasks now fail in
+        <em>every</em> trial (was 8 in the previous run; was 0 at n=30).
+        Remaining systematic gaps: hallucination_33, _37,
+        disambiguation_31 — plus one regression (disambiguation_9).</li>
+      <li><strong>The headline numbers are optimistic (task-selection effect).</strong>
+        A controlled run on 12 PREVIOUSLY-UNSEEN tasks scored ~0.33 Avg Pass^3
+        vs 0.80 on the always-used first-20 set. The held-out reliability is
+        much lower; treat every "ours" row above as an upper bound that partly
+        reflects which tasks were repeatedly measured. See the controlled
+        experiment panel.</li>
+      <li><strong>Local measurement, not official.</strong> Final ranking is
+        produced by the organizers on a hidden test set on July 19, 2026.
+        The numbers above are development validation only — useful for
+        directional comparison, not for any external claim.</li>
+    </ul>
+  </section>
+
+  <section class="panel">
+    <h2>Provenance</h2>
+    <div class="cite">
+      <strong>Latest run (n=60, 7-rule prompt + medium thinking):</strong>
+      <code>output/track_1_agent_under_test/20260528-175243__track_1_agent_under_test-local_test_set_jg__test-trials3-base20-hall20-dis20__gemini-gemini-3.5-flash__medium.json</code><br>
+      Wall time: 15 246 s (~4.2 h) · 1,504 LLM calls · 180 task-trials<br><br>
+      <strong>Previous n=60 run (4-rule prompt, default thinking, superseded):</strong>
+      <code>output/track_1_agent_under_test/20260528-112330__track_1_agent_under_test-local_test_set_jg__test-trials3-base20-hall20-dis20__gemini-gemini-3.5-flash.json</code><br>
+      Wall time: 9 009 s (~2.5 h) · 1,184 LLM calls · 180 task-trials<br><br>
+      <strong>First n=30 run (superseded):</strong>
+      <code>output/track_1_agent_under_test/20260528-082604__track_1_agent_under_test-local_test_set_jg__test-trials3-base10-hall10-dis10__gemini-gemini-3.5-flash.json</code><br>
+      Wall time: 3 305 s (~55 min) · 486 LLM calls · 90 task-trials<br><br>
+      <strong>Opus 4.8 run (TRAIN split, exploratory):</strong>
+      <code>output/track_1_agent_under_test/20260528-202617__track_1_agent_under_test-local_smoke_opus_jg__train-trials3-base10-hall10-dis10__anthropic-claude-opus-4-8.json</code><br>
+      Wall time: 1 836 s (~30 min) · 255 LLM calls · 90 task-trials · thinking off<br><br>
+      <strong>Ollama qwen3.6:35b-mlx smoke:</strong>
+      <code>output/track_1_agent_under_test/20260528-201950__…__ollama_chat-qwen3.6-35b-mlx.json</code><br>
+      Wall time: 253 s · 6 task-trials (train smoke)<br><br>
+      Scenario: <code>scenarios/track_1_agent_under_test/local_test_set_jg.toml</code><br>
+      Agent: <code>src/track_1_agent_under_test/car_bench_agent.py</code> at the 2026-05-28 12:00 7-rule SYSTEM_PROMPT · Temperature 0.0 · <code>--thinking --reasoning-effort medium</code>
+    </div>
+  </section>
+
+  <footer>
+    CAR-bench Challenge · IJCAI-ECAI 2026 · Track 1 (Open Track) · this snapshot
+    is local development-validation only.
+  </footer>
+</main>
+</body>
+</html>

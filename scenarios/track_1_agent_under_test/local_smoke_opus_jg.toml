@@ -1,0 +1,27 @@
+# Smoke scenario — Anthropic Claude Opus 4.8 variant.
+# Copy of local_smoke_jg.toml with the model swapped to Opus 4.8.
+# Runs 2 train tasks from each CAR-bench task type, 1 trial.
+#
+# Model: anthropic/claude-opus-4-8 (LiteLLM provider prefix).
+# Requires ANTHROPIC_API_KEY in .env (already set).
+# Pricing: $5 / 1M input tokens, $25 / 1M output tokens.
+#
+# Thinking is intentionally OFF here to bound cost during smoke. To enable
+# Anthropic extended thinking, append: --thinking --reasoning-effort medium
+# (LiteLLM maps reasoning_effort low/medium/high to a thinking budget).
+
+[evaluator]
+endpoint = "http://127.0.0.1:8081"
+cmd = "python src/evaluator/server.py --host 127.0.0.1 --port 8081"
+
+[agent_under_test]
+endpoint = "http://127.0.0.1:8080"
+cmd = "python src/track_1_agent_under_test/server.py --host 127.0.0.1 --port 8080 --agent-llm anthropic/claude-opus-4-8 --temperature 0.0"
+
+[config]
+num_trials = 3
+task_split = "train"
+tasks_base_num_tasks = 10
+tasks_hallucination_num_tasks = 10
+tasks_disambiguation_num_tasks = 10
+max_steps = 50

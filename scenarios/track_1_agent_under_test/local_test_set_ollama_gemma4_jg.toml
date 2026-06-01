@@ -1,0 +1,26 @@
+# Local OSS comparison: Gemma4 vs Qwen3.6 (both MLX, local, $0).
+# EXACT mirror of local_test_set_ollama_jg.toml (qwen3.6:35b-mlx) — same 60
+# test tasks (first 20 per split), 3 trials, thinking off, T=0 — only the
+# model differs, for an apples-to-apples comparison.
+#
+# Model: ollama_chat/gemma4:31b-mlx (Apple-Silicon MLX, ~31B, macOS-only).
+#   Verify it advertises `tools` with `ollama show gemma4:31b-mlx` BEFORE
+#   trusting results — Gemma's native tool calling is historically weaker than
+#   Qwen's, which is the main risk for this comparison.
+# Ports 8085/8086 (same as the qwen ollama scenario; run them sequentially).
+
+[evaluator]
+endpoint = "http://127.0.0.1:8086"
+cmd = "python src/evaluator/server.py --host 127.0.0.1 --port 8086"
+
+[agent_under_test]
+endpoint = "http://127.0.0.1:8085"
+cmd = "python src/track_1_agent_under_test/server.py --host 127.0.0.1 --port 8085 --agent-llm ollama_chat/gemma4:31b-mlx --temperature 0.0"
+
+[config]
+num_trials = 3
+task_split = "test"
+tasks_base_num_tasks = 20
+tasks_hallucination_num_tasks = 20
+tasks_disambiguation_num_tasks = 20
+max_steps = 50

@@ -1,0 +1,22 @@
+# Gemma4 on the 12 PREVIOUSLY-UNSEEN tasks — held-out reality check.
+# Same 12 ids as the A/B/C experiment (base 41/61/81/99, hall 41/61/81/97,
+# disamb 41/43/47/49), Pass^3. Mirrors the gemma4 seen-set config (thinking
+# off, T=0) so the only difference vs that 0.733 run is the task set → tells
+# us whether 0.733 holds on unseen tasks or collapses like Gemini did
+# (0.80 seen → 0.33 unseen). $0 local. Ports 8085/8086.
+
+[evaluator]
+endpoint = "http://127.0.0.1:8086"
+cmd = "python src/evaluator/server.py --host 127.0.0.1 --port 8086"
+
+[agent_under_test]
+endpoint = "http://127.0.0.1:8085"
+cmd = "python src/track_1_agent_under_test/server.py --host 127.0.0.1 --port 8085 --agent-llm ollama_chat/gemma4:31b-mlx --temperature 0.0"
+
+[config]
+num_trials = 3
+task_split = "test"
+tasks_base_task_id_filter = ["base_41", "base_61", "base_81", "base_99"]
+tasks_hallucination_task_id_filter = ["hallucination_41", "hallucination_61", "hallucination_81", "hallucination_97"]
+tasks_disambiguation_task_id_filter = ["disambiguation_41", "disambiguation_43", "disambiguation_47", "disambiguation_49"]
+max_steps = 50

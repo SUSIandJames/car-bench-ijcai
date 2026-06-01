@@ -1,0 +1,36 @@
+# Smoke scenario — local Ollama variant.
+# Copy of local_smoke_jg.toml with the model served by a local Ollama daemon.
+# Runs 2 train tasks from each CAR-bench task type, 1 trial.
+#
+# Model: ollama_chat/qwen3.6:35b-mlx
+#   - The `ollama_chat/` prefix (NOT `ollama/`) is required for reliable
+#     native tool calling via LiteLLM — CAR-bench depends on tool calls.
+#   - qwen3.6:35b-mlx is the Apple-Silicon MLX build (~21 GB, macOS-only,
+#     faster than the GGUF qwen3.6:latest on Mac). Pulled locally.
+#   - Verify it advertises `tools` with `ollama show qwen3.6:35b-mlx`.
+#
+# Prerequisites:
+#   - Ollama daemon running (default http://localhost:11434 — LiteLLM picks
+#     this up automatically; override with OLLAMA_API_BASE if non-default).
+#   - The model pulled: `ollama pull qwen3.6:35b-mlx`
+#   - No API key needed; cost is $0 (local inference).
+#
+# Thinking is OFF here. Qwen3 supports thinking, but LiteLLM's
+# reasoning_effort passthrough for Ollama is inconsistent — enable only after
+# the no-thinking baseline works. (Append: --thinking --reasoning-effort medium)
+
+[evaluator]
+endpoint = "http://127.0.0.1:8081"
+cmd = "python src/evaluator/server.py --host 127.0.0.1 --port 8081"
+
+[agent_under_test]
+endpoint = "http://127.0.0.1:8080"
+cmd = "python src/track_1_agent_under_test/server.py --host 127.0.0.1 --port 8080 --agent-llm ollama_chat/qwen3.6:35b-mlx --temperature 0.0"
+
+[config]
+num_trials = 1
+task_split = "train"
+tasks_base_num_tasks = 2
+tasks_hallucination_num_tasks = 2
+tasks_disambiguation_num_tasks = 2
+max_steps = 50

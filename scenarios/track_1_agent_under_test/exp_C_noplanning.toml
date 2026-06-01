@@ -1,0 +1,21 @@
+# 3-WAY EXPERIMENT — config C: BASELINE + NO planning tool.
+# Same 12 unseen tasks + Pass^3 as config A. Hides `planning_tool` from the
+# LLM (--suppress-tools planning_tool) to kill the malformed-schema retry
+# storms (545 PLANNING_TOOL_ERROR results in the 0.80 run, present in 10/12
+# failing tasks). No verify pass. T=0, single pass.
+
+[evaluator]
+endpoint = "http://127.0.0.1:8081"
+cmd = "python src/evaluator/server.py --host 127.0.0.1 --port 8081"
+
+[agent_under_test]
+endpoint = "http://127.0.0.1:8080"
+cmd = "python src/track_1_agent_under_test/server.py --host 127.0.0.1 --port 8080 --agent-llm gemini/gemini-3.5-flash --temperature 0.0 --thinking --reasoning-effort medium --suppress-tools planning_tool"
+
+[config]
+num_trials = 3
+task_split = "test"
+tasks_base_task_id_filter = ["base_41", "base_61", "base_81", "base_99"]
+tasks_hallucination_task_id_filter = ["hallucination_41", "hallucination_61", "hallucination_81", "hallucination_97"]
+tasks_disambiguation_task_id_filter = ["disambiguation_41", "disambiguation_43", "disambiguation_47", "disambiguation_49"]
+max_steps = 50

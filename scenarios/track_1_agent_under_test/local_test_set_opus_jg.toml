@@ -1,0 +1,33 @@
+# Public test-set scenario — Anthropic Claude Opus 4.8 variant.
+# Copy of local_test_set_jg.toml with the model swapped to Opus 4.8.
+# 60 tasks (20 per split) × 3 trials → Pass^3, directly comparable to the
+# leaderboard and to our Gemini 3.5 Flash runs.
+#
+# Model: anthropic/claude-opus-4-8 (LiteLLM provider prefix).
+# Requires ANTHROPIC_API_KEY in .env (already set).
+# Pricing: $5 / 1M input tokens, $25 / 1M output tokens.
+#
+# COST WARNING: Opus 4.8 input is 3.3x and output 2.8x the Gemini 3.5 Flash
+# price. Our Gemini n=60 run used ~26M input + ~2.2M output tokens. At Opus
+# pricing that is roughly 26*5 + 2.2*25 ≈ $185 IF token counts are similar
+# (Opus tends to be more concise, so likely lower). Run the smoke variant
+# first and check the projected cost before launching this.
+#
+# Thinking is OFF by default to bound cost. To enable Anthropic extended
+# thinking, append: --thinking --reasoning-effort medium
+
+[evaluator]
+endpoint = "http://127.0.0.1:8081"
+cmd = "python src/evaluator/server.py --host 127.0.0.1 --port 8081"
+
+[agent_under_test]
+endpoint = "http://127.0.0.1:8080"
+cmd = "python src/track_1_agent_under_test/server.py --host 127.0.0.1 --port 8080 --agent-llm anthropic/claude-opus-4-8 --temperature 0.0"
+
+[config]
+num_trials = 3
+task_split = "test"
+tasks_base_num_tasks = 20
+tasks_hallucination_num_tasks = 20
+tasks_disambiguation_num_tasks = 20
+max_steps = 50

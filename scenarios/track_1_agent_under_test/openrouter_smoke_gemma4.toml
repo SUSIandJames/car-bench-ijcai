@@ -1,0 +1,20 @@
+# OpenRouter — Gemma-4-31B-it (OpenAI-compatible, tool-calling pre-configured).
+# SMOKE: 1 task/type, 1 trial — confirm STRUCTURED tool_calls come back before
+# the full run. LiteLLM routes openrouter/* and reads OPENROUTER_API_KEY from
+# .env automatically (no --api-base needed). Isolated from existing scenarios.
+
+[evaluator]
+endpoint = "http://127.0.0.1:8081"
+cmd = "python src/evaluator/server.py --host 127.0.0.1 --port 8081"
+
+[agent_under_test]
+endpoint = "http://127.0.0.1:8080"
+cmd = "python src/track_1_agent_under_test/server.py --host 127.0.0.1 --port 8080 --agent-llm openrouter/google/gemma-4-31b-it --temperature 0.0 --sanitize-tool-schemas"
+
+[config]
+num_trials = 1
+task_split = "train"
+tasks_base_num_tasks = 1
+tasks_hallucination_num_tasks = 1
+tasks_disambiguation_num_tasks = 1
+max_steps = 50

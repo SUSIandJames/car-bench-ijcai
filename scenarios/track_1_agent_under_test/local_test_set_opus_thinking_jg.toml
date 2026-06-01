@@ -1,0 +1,29 @@
+# Public test-set scenario — Claude Opus 4.8 with MEDIUM extended thinking.
+# Same as local_test_set_opus_jg.toml but with --thinking --reasoning-effort
+# medium. LiteLLM maps reasoning_effort (low/medium/high) to an Anthropic
+# extended-thinking budget. 60 tasks (20/20/20) × 3 trials → Pass^3,
+# comparable to the leaderboard and the thinking-off Opus run.
+#
+# Notes:
+#   - temperature is dropped automatically for opus-4-8 (the code skips it),
+#     which is also required when extended thinking is enabled.
+#   - Prompt caching (system + 57 tools) applies here too.
+#   - Pricing: $5 / 1M input, $25 / 1M output (output INCLUDES thinking
+#     tokens), cache read ~0.1x input. Expect output cost to rise vs the
+#     thinking-off run because thinking tokens are billed as output.
+
+[evaluator]
+endpoint = "http://127.0.0.1:8081"
+cmd = "python src/evaluator/server.py --host 127.0.0.1 --port 8081"
+
+[agent_under_test]
+endpoint = "http://127.0.0.1:8080"
+cmd = "python src/track_1_agent_under_test/server.py --host 127.0.0.1 --port 8080 --agent-llm anthropic/claude-opus-4-8 --temperature 0.0 --thinking --reasoning-effort medium"
+
+[config]
+num_trials = 3
+task_split = "test"
+tasks_base_num_tasks = 20
+tasks_hallucination_num_tasks = 20
+tasks_disambiguation_num_tasks = 20
+max_steps = 50

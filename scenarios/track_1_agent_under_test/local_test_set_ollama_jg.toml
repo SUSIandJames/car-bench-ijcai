@@ -1,0 +1,35 @@
+# Public test-set scenario — local Ollama variant.
+# Copy of local_test_set_jg.toml served by a local Ollama daemon.
+# 60 tasks (20 per split) × 3 trials → Pass^3, comparable to the leaderboard
+# and our Gemini / Opus runs.
+#
+# Model: ollama_chat/qwen3.6:35b-mlx
+#   - `ollama_chat/` prefix required for native tool calling.
+#   - qwen3.6:35b-mlx = Apple-Silicon MLX build (~21 GB), faster than GGUF
+#     on Mac. Verify tools capability with `ollama show qwen3.6:35b-mlx`.
+#   - $0 inference cost, but WALL TIME will dominate: local 35B-class
+#     inference on Apple Silicon is far slower than a hosted API. Expect this
+#     to run for many hours. Always run the smoke variant first to measure
+#     per-task latency before committing to 180 task-trials.
+#
+# Prerequisites:
+#   - Ollama daemon up; `ollama pull qwen3.6:35b-mlx`.
+#   - Override base via OLLAMA_API_BASE if not localhost:11434.
+#
+# Thinking OFF by default (see smoke TOML notes).
+
+[evaluator]
+endpoint = "http://127.0.0.1:8086"
+cmd = "python src/evaluator/server.py --host 127.0.0.1 --port 8086"
+
+[agent_under_test]
+endpoint = "http://127.0.0.1:8085"
+cmd = "python src/track_1_agent_under_test/server.py --host 127.0.0.1 --port 8085 --agent-llm ollama_chat/qwen3.6:35b-mlx --temperature 0.0"
+
+[config]
+num_trials = 3
+task_split = "test"
+tasks_base_num_tasks = 20
+tasks_hallucination_num_tasks = 20
+tasks_disambiguation_num_tasks = 20
+max_steps = 50

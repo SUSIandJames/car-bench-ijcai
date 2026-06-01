@@ -1,0 +1,23 @@
+# HF Inference Endpoint — Gemma-4-31B-it via OpenAI-compatible TGI (ISOLATED).
+# FULL public test split: ALL tasks (base 50 + hall 50 + disamb 25 = 125) × 3
+# trials = 375 runs → our first complete, statistically meaningful Pass^3.
+# Run hf_smoke_gemma4.toml FIRST to confirm tool-calling works on the endpoint.
+#
+# Token via env var HF_ENDPOINT_TOKEN (add to .env). Nothing here touches the
+# existing scenarios.
+
+[evaluator]
+endpoint = "http://127.0.0.1:8081"
+cmd = "python src/evaluator/server.py --host 127.0.0.1 --port 8081"
+
+[agent_under_test]
+endpoint = "http://127.0.0.1:8080"
+cmd = "python src/track_1_agent_under_test/server.py --host 127.0.0.1 --port 8080 --agent-llm openai/google/gemma-4-31B-it --temperature 0.0 --api-base https://cw8ixquvm3pq879h.us-east-2.aws.endpoints.huggingface.cloud/v1 --api-key-env HF_ENDPOINT_TOKEN --sanitize-tool-schemas"
+
+[config]
+num_trials = 3
+task_split = "test"
+tasks_base_num_tasks = -1
+tasks_hallucination_num_tasks = -1
+tasks_disambiguation_num_tasks = -1
+max_steps = 50
